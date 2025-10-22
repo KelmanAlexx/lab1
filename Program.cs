@@ -6,6 +6,11 @@ enum Gender { Мужской, Женский }
 enum RoleType { Доктор, Ученый, Бизнесс_Коуч, Электрик, Ремонтник, Шиномонтажник, Психолог, Программист, Учитель, Безработный, CEO, Полицейский, Партийный_Работник, Вор, Врач_Учестковый, Уролог, Теоретик, Порно_Звезда, Груммер, Ветеренар, Парикмахер, Барбер, Работник_фермы }
 enum FactType { Местный_Сумасшедший, Играет_в_шахматы, Любит_фурри, Пердит_по_ночам, Боится_врачей, Боится_учителей, Боится_фурри, Боится_Полиции, Любит_трогать_траву, Поталогический_лжец, Боится_женщин, Боится_мужчин, Икает_от_испуга, Не_может_без_манги, Повышенное_Потение, Пропагандирует_дыхание_маткой, Рыгает_при_всех, Боится_ходить_в_туалет_один, Ходит_в_туалет_по_2_часа, Не_может_спать_без_света, Боится_монстров_в_шкафу, Уверен_что_Фурри_существуют, Уверен_что_Пришельцы_реальны_и_они_нас_всех_спасут, Торгует_рулонами_с_газоном, Потомственный_ЖидоЕврей, Сбежал_с_работы_на_ферме, Работал_на_ферме, Был_ассистентом_врача, Пепрдавал_в_оксфорде, Любит_животных, Професианал_в_вскрытии_замков, Бывший_военный, Подрабатывает_на_стройке, Подрабатывает_в_кафе_горничных }
 
+
+/*public struct Point
+{
+    int x, y;
+}*/
 abstract class Person
 {
     public string FullName { get; }
@@ -53,6 +58,13 @@ class Player : Person, Votable
     public bool IsAlive { get; private set; } = true;
     public int VoteCount { get; private set; } = 0;
 
+    ///public Point point;
+
+    //public class Oct
+    //{
+    //
+    //}
+    
     public Player(string fullName, int age, RoleType role, FactType fact, Gender gender, int id)
         : base(fullName, age, gender)
     {
@@ -80,6 +92,38 @@ class Player : Person, Votable
     {
         return $"{FullName} (Пол: {Gender}, Возраст: {Age}, Роль: {Role.ToString().Replace('_', ' ')}, Факт: {Fact.ToString().Replace('_', ' ')})";
     }
+
+    public override int GetHashCode()
+    {
+        return ID.GetHashCode();
+    }
+
+    public override bool Equals(object o)
+    {
+        //return o is Player p && p.ID == ID;
+        if (o == null)
+        {
+            return false;
+        }
+        if (o is Player)
+        {
+            Player p = o as Player;
+            if (p.ID == ID)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        
+    }
+    
 }
 
 class Program
@@ -196,7 +240,6 @@ class Program
     static void Main()
     {
         GeneratePlayers(8);
-
         Console.WriteLine("--- Начальная команда ---");
         
         foreach (var p in players)
